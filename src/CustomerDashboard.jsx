@@ -1,3 +1,4 @@
+// CustomerDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import ProfilePage from './components/ProfilePage';
@@ -62,7 +63,7 @@ function CustomerDashboard() {
     };
 
     loadData();
-  }, []); // Empty dependency array - only runs once after initial render
+  }, []);
 
   const handleCustomerSelect = (customer) => {
     setCustomerData(customer);
@@ -85,63 +86,74 @@ function CustomerDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6">Customer 360° Dashboard</h1>
-            
-            
-        {customerData && (
-            <div className="mt-4 md:mt-0 mb-6">
-                <GlobalSearchBar 
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <div className="w-64 bg-white shadow-sm border-r">
+        <div className="p-4 border-b">
+          <h1 className="text-xl font-bold">Customer 360°</h1>
+        </div>
+        <nav className="p-4">
+          <ul className="space-y-2">
+            <li>
+              <button
+                className={`w-full text-left px-4 py-2 rounded-lg ${activeTab === 'profile' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+                onClick={() => setActiveTab('profile')}
+              >
+                Profile
+              </button>
+            </li>
+            <li>
+              <button
+                className={`w-full text-left px-4 py-2 rounded-lg ${activeTab === 'portfolio' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+                onClick={() => setActiveTab('portfolio')}
+              >
+                Portfolio
+              </button>
+            </li>
+            <li>
+              <button
+                className={`w-full text-left px-4 py-2 rounded-lg ${activeTab === 'transactions' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'}`}
+                onClick={() => setActiveTab('transactions')}
+              >
+                Transactions
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-auto">
+        <div className="container mx-auto p-6">
+          {customerData && (
+            <div className="mb-6">
+              <GlobalSearchBar 
                 customers={allCustomers} 
                 onCustomerSelect={handleCustomerSelect} 
                 currentCustomerId={customerData.customer_id}
-                />
+              />
+              <div className="mt-2 bg-blue-50 p-3 rounded flex items-center">
+                <span className="font-medium">Current Customer:</span>
+                <span className="ml-2">{customerData.first_name} {customerData.last_name}</span>
+                <span className="ml-2 text-gray-500 text-sm">({customerData.customer_id})</span>
+              </div>
             </div>
+          )}
+          
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            {activeTab === 'profile' && customerData && (
+              <ProfilePage customerData={customerData} />
             )}
-
-        {customerData && (
-            <div className="mb-2 bg-blue-50 p-2 rounded flex items-center">
-            <span className="font-medium">Current Customer:</span>
-            <span className="ml-2">{customerData.first_name} {customerData.last_name}</span>
-            <span className="ml-2 text-gray-500 text-sm">({customerData.customer_id})</span>
-            </div>
-        )}
-
-      <div className="mb-6">
-        <div className="flex border-b">
-          <button 
-            className={`py-2 px-4 ${activeTab === 'profile' ? 'border-b-2 border-blue-500 font-medium' : ''}`}
-            onClick={() => setActiveTab('profile')}
-          >
-            Profile
-          </button>
-          <button
-            className={`py-2 px-4 ${activeTab === 'portfolio' ? 'border-b-2 border-blue-500 font-medium' : ''}`}
-            onClick={() => setActiveTab('portfolio')}
-          >
-            Portfolio
-          </button>
-          <button
-            className={`py-2 px-4 ${activeTab === 'transactions' ? 'border-b-2 border-blue-500 font-medium' : ''}`}
-            onClick={() => setActiveTab('transactions')}
-          >
-            Transactions
-          </button>
+            
+            {activeTab === 'portfolio' && (
+              <PortfolioPage portfolioData={portfolioData} customerData={customerData} />
+            )}
+            
+            {activeTab === 'transactions' && (
+              <TransactionPage transactionData={transactionData} customerData={customerData} />
+            )}
+          </div>
         </div>
-      </div>
-      
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        {activeTab === 'profile' && customerData && (
-          <ProfilePage customerData={customerData} />
-        )}
-        
-        {activeTab === 'portfolio' && (
-          <PortfolioPage portfolioData={portfolioData} customerData={customerData} />
-        )}
-        
-        {activeTab === 'transactions' && (
-          <TransactionPage transactionData={transactionData} customerData={customerData} />
-        )}
       </div>
     </div>
   );

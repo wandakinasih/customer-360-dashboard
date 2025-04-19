@@ -1,25 +1,13 @@
-customer_id,asset_name,asset_type,units,purchase_price,current_value
-C001,Apple Inc.,Stocks,25,135.75,4250.50
-C001,Microsoft Corp.,Stocks,15,245.25,4125.30
-C001,Vanguard Total Bond ETF,Bonds,50,85.20,4387.50
-C001,S&P 500 Index Fund,Mutual Funds,30,375.80,11650.50
-C001,Treasury Bond 2025,Fixed Income,10000,0.98,10250.00
-C002,Johnson & Johnson,Stocks,20,165.30,3450.60
-C002,Vanguard REIT ETF,Real Estate,40,92.15,3825.20
-C002,Municipal Bond Fund,Bonds,75,110.50,8362.50
-C002,Money Market Fund,Cash Equivalent,15000,1.00,15000.00
-C003,Tesla Inc.,Stocks,12,780.45,9875.40
-C003,Bitcoin ETF,Cryptocurrency,8,325.75,2950.40
-C003,ARK Innovation ETF,ETFs,35,125.40,5250.25
-C003,Emerging Markets Fund,Mutual Funds,45,55.25,2625.75
-C003,Small Cap Growth Fund,Mutual Funds,60,48.75,3120.00
-C004,Berkshire Hathaway,Stocks,5,415.20,2125.50
-C004,US Treasury Bonds,Bonds,25000,0.985,24950.00
-C004,S&P 500 Index Fund,Mutual Funds,85,375.80,32978.00
-C004,Corporate Bond Fund,Bonds,120,105.50,12840.00
-C004,REITs Portfolio,Real Estate,55,88.75,5105.25
-C005,Amazon.com Inc.,Stocks,18,3250.75,62500.00
-C005,Private Equity Fund,Alternative,100000,1.25,132500.00
-C005,High Yield Bond Fund,Bonds,200,67.50,14250.00
-C005,Gold ETF,Commodities,40,185.25,7850.00
-C005,International Stock Fund,Mutual Funds,150,45.25,7125.00
+customer_id,product_type,product_category,product_name,account_number,balance,interest_rate,maturity_date,currency
+C001,FUNDING,CASA,Current Account,123456789,5000.00,0.00,,USD
+C001,FUNDING,TIME_DEPOSIT,3-Month Fixed Deposit,987654321,10000.00,3.50,2025-06-30,USD
+C001,LENDING,SECURED,Home Loan,456789123,250000.00,4.25,2040-05-15,USD
+C001,LENDING,UNSECURED,Personal Loan,789123456,15000.00,8.75,2026-12-31,USD
+C001,WEALTH,MUTUAL_FUNDS,Global Equity Fund,MF123456,25000.00,,,USD
+C001,WEALTH,BONDS,Corporate Bond,CB789123,15000.00,5.00,2028-03-15,USD
+C001,WEALTH,GOLD,Gold Savings Account,GS456789,7500.00,,,USD
+C001,WEALTH,BANCA_INSURANCE,Life Insurance,BI123789,100000.00,,,USD
+C002,FUNDING,CASA,Savings Account,123456788,15000.00,0.50,,USD
+C002,FUNDING,TIME_DEPOSIT,6-Month Fixed Deposit,987654322,20000.00,4.00,2025-09-30,USD
+C002,LENDING,SECURED,Auto Loan,456789124,35000.00,5.50,2028-07-20,USD
+C002,WEALTH,MUTUAL_FUNDS,Balanced Fund,MF123457,18000.00,,,USD

@@ -1,145 +1,306 @@
-import React, { useMemo } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+// PortfolioPage.jsx
+import React, { useMemo, useState } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 function PortfolioPage({ portfolioData, customerData }) {
+  const [activeTab, setActiveTab] = useState('funding');
+  
   // Filter portfolio data for current customer
   const customerPortfolio = useMemo(() => {
     return portfolioData.filter(item => item.customer_id === customerData.customer_id);
   }, [portfolioData, customerData]);
 
-  // Calculate asset allocation for pie chart
-  const assetAllocation = useMemo(() => {
-    const allocation = {};
-    let total = 0;
-    
-    customerPortfolio.forEach(item => {
-      const value = parseFloat(item.current_value);
-      if (!isNaN(value)) {
-        allocation[item.asset_type] = (allocation[item.asset_type] || 0) + value;
-        total += value;
-      }
-    });
-    
-    return Object.keys(allocation).map(key => ({
-      name: key,
-      value: allocation[key],
-      percentage: ((allocation[key] / total) * 100).toFixed(2)
-    }));
-  }, [customerPortfolio]);
+  // Filter by product type
+  const fundingProducts = useMemo(() => 
+    customerPortfolio.filter(item => item.product_type === 'FUNDING'), 
+    [customerPortfolio]
+  );
   
-  // Colors for pie chart
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+  const lendingProducts = useMemo(() => 
+    customerPortfolio.filter(item => item.product_type === 'LENDING'), 
+    [customerPortfolio]
+  );
   
-  // Calculate total portfolio value
-  const totalPortfolioValue = useMemo(() => {
-    return customerPortfolio.reduce((sum, item) => {
-      return sum + parseFloat(item.current_value || 0);
-    }, 0);
-  }, [customerPortfolio]);
+  const wealthProducts = useMemo(() => 
+    customerPortfolio.filter(item => item.product_type === 'WEALTH'), 
+    [customerPortfolio]
+  );
 
-  // Performance data (mock data)
-  const performanceData = [
-    { month: 'Jan', value: 10000 },
-    { month: 'Feb', value: 11200 },
-    { month: 'Mar', value: 10800 },
-    { month: 'Apr', value: 11500 },
-    { month: 'May', value: 12300 },
-    { month: 'Jun', value: 12100 }
+  // Calculate totals
+  const fundingTotal = useMemo(() => 
+    fundingProducts.reduce((sum, item) => sum + parseFloat(item.balance || 0), 0), 
+    [fundingProducts]
+  );
+  
+  const lendingTotal = useMemo(() => 
+    lendingProducts.reduce((sum, item) => sum + parseFloat(item.balance || 0), 0), 
+    [lendingProducts]
+  );
+  
+  const wealthTotal = useMemo(() => 
+    wealthProducts.reduce((sum, item) => sum + parseFloat(item.balance || 0), 0), 
+    [wealthProducts]
+  );
+  
+  const totalPortfolioValue = fundingTotal + lendingTotal + wealthTotal;
+
+  // Prepare data for charts
+  const allocationData = [
+    { name: 'Funding', value: fundingTotal },
+    { name: 'Lending', value: lendingTotal },
+    { name: 'Wealth', value: wealthTotal }
   ];
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Portfolio</h2>
       
+      <div className="flex border-b mb-6">
+        <button
+          className={`py-2 px-4 ${activeTab === 'funding' ? 'border-b-2 border-blue-500 font-medium' : ''}`}
+          onClick={() => setActiveTab('funding')}
+        >
+          Funding
+        </button>
+        <button
+          className={`py-2 px-4 ${activeTab === 'lending' ? 'border-b-2 border-blue-500 font-medium' : ''}`}
+          onClick={() => setActiveTab('lending')}
+        >
+          Lending
+        </button>
+        <button
+          className={`py-2 px-4 ${activeTab === 'wealth' ? 'border-b-2 border-blue-500 font-medium' : ''}`}
+          onClick={() => setActiveTab('wealth')}
+        >
+          Wealth
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="bg-gray-100 p-4 rounded">
-          <h3 className="text-lg font-medium mb-2">Portfolio Summary</h3>
+          <h3 className="text-lg font-medium mb-2">Total Portfolio Value</h3>
           <p className="text-3xl font-bold mb-2">${totalPortfolioValue.toLocaleString()}</p>
-          <p className="text-green-600">+5.8% YTD</p>
+          <div className="flex justify-between">
+            <span className="text-sm">Funding: ${fundingTotal.toLocaleString()}</span>
+            <span className="text-sm">Lending: ${lendingTotal.toLocaleString()}</span>
+            <span className="text-sm">Wealth: ${wealthTotal.toLocaleString()}</span>
+          </div>
         </div>
         
         <div className="col-span-1 md:col-span-2 bg-gray-100 p-4 rounded">
-          <h3 className="text-lg font-medium mb-2">Asset Allocation</h3>
+          <h3 className="text-lg font-medium mb-2">Portfolio Allocation</h3>
           <div style={{ height: "250px" }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={assetAllocation}
+                  data={allocationData}
                   cx="50%"
                   cy="50%"
                   labelLine={true}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
-                  label={({ name, percentage }) => `${name}: ${percentage}%`}
+                  label={({ name, value }) => `${name}: $${value.toLocaleString()}`}
                 >
-                  {assetAllocation.map((entry, index) => (
+                  {allocationData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+                <Legend />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
-      
-      <div className="bg-gray-100 p-4 rounded mb-6">
-        <h3 className="text-lg font-medium mb-2">Performance</h3>
-        <div style={{ height: "250px" }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={performanceData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
-              <Legend />
-              <Line type="monotone" dataKey="value" stroke="#0088FE" activeDot={{ r: 8 }} />
-            </LineChart>
-          </ResponsiveContainer>
+
+      {activeTab === 'funding' && (
+        <div className="bg-gray-100 p-4 rounded mb-6">
+          <h3 className="text-lg font-medium mb-4">Funding Products</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <h4 className="font-medium mb-2">CASA (Current & Savings Accounts)</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Account</th>
+                      <th className="px-4 py-2 text-left">Account Number</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fundingProducts
+                      .filter(item => item.product_category === 'CASA')
+                      .map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">{item.account_number}</td>
+                          <td className="px-4 py-2">${parseFloat(item.balance).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Time Deposits</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Product</th>
+                      <th className="px-4 py-2 text-left">Maturity Date</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                      <th className="px-4 py-2 text-left">Interest Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fundingProducts
+                      .filter(item => item.product_category === 'TIME_DEPOSIT')
+                      .map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">{item.maturity_date || '-'}</td>
+                          <td className="px-4 py-2">${parseFloat(item.balance).toLocaleString()}</td>
+                          <td className="px-4 py-2">{item.interest_rate}%</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div className="bg-gray-100 p-4 rounded">
-        <h3 className="text-lg font-medium mb-2">Holdings</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="px-4 py-2 text-left">Asset</th>
-                <th className="px-4 py-2 text-left">Type</th>
-                <th className="px-4 py-2 text-left">Units</th>
-                <th className="px-4 py-2 text-left">Purchase Price</th>
-                <th className="px-4 py-2 text-left">Current Value</th>
-                <th className="px-4 py-2 text-left">Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customerPortfolio.map((item, index) => {
-                const purchaseValue = parseFloat(item.purchase_price) * parseFloat(item.units);
-                const currentValue = parseFloat(item.current_value);
-                const change = ((currentValue - purchaseValue) / purchaseValue) * 100;
-                
-                return (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="px-4 py-2">{item.asset_name}</td>
-                    <td className="px-4 py-2">{item.asset_type}</td>
-                    <td className="px-4 py-2">{item.units}</td>
-                    <td className="px-4 py-2">${parseFloat(item.purchase_price).toFixed(2)}</td>
-                    <td className="px-4 py-2">${parseFloat(item.current_value).toFixed(2)}</td>
-                    <td className={`px-4 py-2 ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {change >= 0 ? '+' : ''}{change.toFixed(2)}%
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+      )}
+
+      {activeTab === 'lending' && (
+        <div className="bg-gray-100 p-4 rounded mb-6">
+          <h3 className="text-lg font-medium mb-4">Lending Products</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <h4 className="font-medium mb-2">Secured Loans</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Loan Type</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                      <th className="px-4 py-2 text-left">Interest Rate</th>
+                      <th className="px-4 py-2 text-left">Maturity Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lendingProducts
+                      .filter(item => item.product_category === 'SECURED')
+                      .map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">${parseFloat(item.balance).toLocaleString()}</td>
+                          <td className="px-4 py-2">{item.interest_rate}%</td>
+                          <td className="px-4 py-2">{item.maturity_date}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Unsecured Loans</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Loan Type</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                      <th className="px-4 py-2 text-left">Interest Rate</th>
+                      <th className="px-4 py-2 text-left">Maturity Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lendingProducts
+                      .filter(item => item.product_category === 'UNSECURED')
+                      .map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">${parseFloat(item.balance).toLocaleString()}</td>
+                          <td className="px-4 py-2">{item.interest_rate}%</td>
+                          <td className="px-4 py-2">{item.maturity_date}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {activeTab === 'wealth' && (
+        <div className="bg-gray-100 p-4 rounded mb-6">
+          <h3 className="text-lg font-medium mb-4">Wealth Products</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div>
+              <h4 className="font-medium mb-2">Mutual Funds & Bonds</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Product</th>
+                      <th className="px-4 py-2 text-left">Type</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                      <th className="px-4 py-2 text-left">Interest Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {wealthProducts
+                      .filter(item => ['MUTUAL_FUNDS', 'BONDS'].includes(item.product_category))
+                      .map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">
+                            {item.product_category === 'MUTUAL_FUNDS' ? 'Mutual Fund' : 'Bond'}
+                          </td>
+                          <td className="px-4 py-2">${parseFloat(item.balance).toLocaleString()}</td>
+                          <td className="px-4 py-2">{item.interest_rate || '-'}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Gold & Insurance</h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Product</th>
+                      <th className="px-4 py-2 text-left">Type</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {wealthProducts
+                      .filter(item => ['GOLD', 'BANCA_INSURANCE'].includes(item.product_category))
+                      .map((item, index) => (
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-4 py-2">{item.product_name}</td>
+                          <td className="px-4 py-2">
+                            {item.product_category === 'GOLD' ? 'Gold' : 'Insurance'}
+                          </td>
+                          <td className="px-4 py-2">${parseFloat(item.balance).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
