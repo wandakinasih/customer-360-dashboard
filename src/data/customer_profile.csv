@@ -1,0 +1,6 @@
+customer_id,first_name,last_name,email,phone,address,date_of_birth,join_date,occupation,employer,annual_income,credit_score,risk_level
+C001,John,Smith,john.smith@email.com,555-123-4567,"123 Main St, Anytown, CA 94102",1985-06-15,2018-03-21,Software Engineer,Tech Solutions Inc.,125000,760,Moderate
+C002,Sarah,Johnson,sarah.j@email.com,555-234-5678,"456 Oak Ave, Anytown, CA 94103",1979-11-03,2015-07-12,Marketing Director,Brand Excellence,98000,720,Conservative
+C003,Michael,Williams,m.williams@email.com,555-345-6789,"789 Pine St, Anytown, CA 94104",1992-04-22,2020-01-15,Financial Analyst,Capital Partners,85000,690,Aggressive
+C004,Emily,Brown,emily.brown@email.com,555-456-7890,"321 Cedar Rd, Anytown, CA 94105",1988-09-17,2017-11-08,Physician,City Hospital,195000,810,Moderate
+C005,David,Jones,d.jones@email.com,555-567-8901,"654 Birch Ln, Anytown, CA 94106",1975-02-28,2013-05-30,Business Owner,Jones Enterprises,250000,780,Aggressive

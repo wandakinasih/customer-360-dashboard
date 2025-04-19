@@ -1,0 +1,63 @@
+customer_id,date,description,category,transaction_type,amount,balance
+C001,2025-03-01,Salary Deposit,Income,credit,5250.00,15675.45
+C001,2025-03-02,Grocery Store Purchase,Groceries,debit,-125.35,15550.10
+C001,2025-03-05,Online Shopping - Amazon,Shopping,debit,-89.99,15460.11
+C001,2025-03-07,Restaurant Payment,Dining,debit,-75.50,15384.61
+C001,2025-03-10,Utility Bill - Electricity,Utilities,debit,-145.20,15239.41
+C001,2025-03-12,Transfer to Savings,Transfer,transfer,-500.00,14739.41
+C001,2025-03-15,Gas Station,Transportation,debit,-45.75,14693.66
+C001,2025-03-18,Mobile Phone Bill,Utilities,debit,-85.00,14608.66
+C001,2025-03-20,Movie Tickets,Entertainment,debit,-35.50,14573.16
+C001,2025-02-25,Salary Deposit,Income,credit,5250.00,14425.35
+C001,2025-02-27,Grocery Store Purchase,Groceries,debit,-150.25,14275.10
+C001,2025-03-22,ATM Withdrawal,Cash Withdrawal,debit,-200.00,14373.16
+C001,2025-03-25,Dividend Payment,Investment,credit,125.80,14498.96
+C001,2025-03-28,Online Subscription,Entertainment,debit,-14.99,14483.97
+C002,2025-03-01,Salary Deposit,Income,credit,4083.33,22450.67
+C002,2025-03-03,Mortgage Payment,Housing,debit,-1850.00,20600.67
+C002,2025-03-05,Grocery Shopping,Groceries,debit,-210.45,20390.22
+C002,2025-03-08,Car Insurance,Insurance,debit,-125.00,20265.22
+C002,2025-03-10,Gym Membership,Health & Fitness,debit,-65.00,20200.22
+C002,2025-03-13,Department Store,Shopping,debit,-175.25,20024.97
+C002,2025-03-15,Transfer from Savings,Transfer,credit,500.00,20524.97
+C002,2025-03-18,Coffee Shop,Dining,debit,-4.75,20520.22
+C002,2025-03-20,Healthcare Co-pay,Healthcare,debit,-35.00,20485.22
+C002,2025-03-23,Online Purchase,Shopping,debit,-55.99,20429.23
+C002,2025-03-26,Gasoline,Transportation,debit,-48.50,20380.73
+C002,2025-03-28,Internet Bill,Utilities,debit,-75.00,20305.73
+C003,2025-03-01,Salary Deposit,Income,credit,3541.67,8750.22
+C003,2025-03-02,Apartment Rent,Housing,debit,-1500.00,7250.22
+C003,2025-03-05,Stock Purchase,Investment,debit,-1000.00,6250.22
+C003,2025-03-08,Grocery Store,Groceries,debit,-85.75,6164.47
+C003,2025-03-10,Ride Sharing Service,Transportation,debit,-25.50,6138.97
+C003,2025-03-12,Restaurant Dinner,Dining,debit,-95.00,6043.97
+C003,2025-03-15,Streaming Service,Entertainment,debit,-12.99,6030.98
+C003,2025-03-18,Electronics Store,Shopping,debit,-899.99,5130.99
+C003,2025-03-20,Phone Bill,Utilities,debit,-80.00,5050.99
+C003,2025-03-23,Transfer from Investment,Transfer,credit,2500.00,7550.99
+C003,2025-03-25,Fast Food,Dining,debit,-15.75,7535.24
+C003,2025-03-27,Healthcare Premium,Insurance,debit,-225.00,7310.24
+C004,2025-03-01,Direct Deposit,Income,credit,8125.00,25478.90
+C004,2025-03-03,Mortgage Payment,Housing,debit,-2750.00,22728.90
+C004,2025-03-05,Investment Transfer,Investment,debit,-2000.00,20728.90
+C004,2025-03-07,Grocery Store,Groceries,debit,-225.35,20503.55
+C004,2025-03-10,Utility Payment - Gas,Utilities,debit,-95.25,20408.30
+C004,2025-03-12,Child Care,Childcare,debit,-850.00,19558.30
+C004,2025-03-15,Department Store,Shopping,debit,-345.75,19212.55
+C004,2025-03-18,Insurance Premium,Insurance,debit,-425.00,18787.55
+C004,2025-03-20,Restaurant Dinner,Dining,debit,-165.50,18622.05
+C004,2025-03-22,Online Shopping,Shopping,debit,-125.99,18496.06
+C004,2025-03-25,Tax Refund,Income,credit,1250.00,19746.06
+C004,2025-03-28,Gasoline,Transportation,debit,-65.45,19680.61
+C005,2025-03-01,Business Revenue,Income,credit,21250.00,75480.25
+C005,2025-03-03,Commercial Lease,Business Expenses,debit,-4500.00,70980.25
+C005,2025-03-05,Equipment Purchase,Business Expenses,debit,-12500.00,58480.25
+C005,2025-03-08,Dividend Income,Investment,credit,3750.00,62230.25
+C005,2025-03-10,Property Management Fee,Real Estate,debit,-1250.00,60980.25
+C005,2025-03-12,Business Insurance,Insurance,debit,-875.00,60105.25
+C005,2025-03-15,Investment Purchase,Investment,debit,-25000.00,35105.25
+C005,2025-03-18,Business Lunch,Business Expenses,debit,-225.50,34879.75
+C005,2025-03-20,Office Supplies,Business Expenses,debit,-375.25,34504.50
+C005,2025-03-22,Business Travel,Travel,debit,-1850.00,32654.50
+C005,2025-03-25,Consulting Fee Income,Income,credit,5500.00,38154.50
+C005,2025-03-28,Tax Payment,Taxes,debit,-8750.00,29404.50
